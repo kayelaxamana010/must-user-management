@@ -1,0 +1,10 @@
+.gen/
+cdktf.out/
+__pycache__/
+.pytest_cache/
+*.pyc
+.env
+*.tfstate
+*.tfstate.backup
+node_modules/
+.python-version

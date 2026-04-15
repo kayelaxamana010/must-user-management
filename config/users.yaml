@@ -1,0 +1,36 @@
+users:
+  - name: alice
+    github_username: alice-devops
+    github_team: backend
+    aws_account: dev
+
+  - name: bob
+    github_username: bob-devops
+    github_team: frontend
+    aws_account: prod
+
+  - name: charlie
+    github_username: charlie-devops
+    github_team: backend
+    aws_account: dev
+
+github:
+  org: must-company
+  teams:
+    - name: backend
+      description: Backend engineering team
+      privacy: closed
+    - name: frontend
+      description: Frontend engineering team
+      privacy: closed
+
+aws:
+  accounts:
+    dev:
+      group_name: dev-team
+      policies:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+    prod:
+      group_name: prod-team
+      policies:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess

@@ -1,0 +1,62 @@
+name: CDKTF Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  AWS_REGION: ap-southeast-1
+  DEPLOY_ENV: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
+
+jobs:
+  deploy:
+    name: CDKTF ${{ github.event_name == 'pull_request' && 'Plan' || 'Deploy' }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write   # required for OIDC-based AWS auth (no long-lived keys)
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install CDKTF CLI
+        run: npm install -g cdktf-cli
+
+      - name: Download provider bindings
+        run: cdktf get
+
+      - name: Run unit tests
+        run: python -m pytest tests/ -v
+
+      - name: CDKTF Plan (PR only)
+        if: github.event_name == 'pull_request'
+        run: cdktf plan user-management-${{ env.DEPLOY_ENV }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ORG_TOKEN }}
+          TF_STATE_BUCKET: ${{ secrets.TF_STATE_BUCKET }}
+
+      - name: CDKTF Deploy (push to main)
+        if: github.event_name == 'push'
+        run: cdktf deploy user-management-${{ env.DEPLOY_ENV }} --auto-approve
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ORG_TOKEN }}
+          TF_STATE_BUCKET: ${{ secrets.TF_STATE_BUCKET }}

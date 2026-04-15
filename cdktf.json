@@ -1,0 +1,11 @@
+{
+  "language": "python",
+  "app": "python main.py",
+  "projectId": "must-user-management",
+  "terraformProviders": [
+    "hashicorp/aws@~> 5.0",
+    "integrations/github@~> 6.0"
+  ],
+  "terraformModules": [],
+  "sendCrashReports": false
+}

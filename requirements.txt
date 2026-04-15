@@ -1,0 +1,6 @@
+cdktf>=0.20.0
+cdktf-cdktf-provider-aws>=19.0.0
+cdktf-cdktf-provider-github>=10.0.0
+constructs>=10.0.0
+pyyaml>=6.0
+pytest>=8.0
