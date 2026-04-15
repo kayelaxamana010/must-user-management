@@ -12,11 +12,11 @@ Built with CDKTF (Python). One config change triggers updates to both providers.
 
 ### Getting started
 
-  pip install -r requirements.txt
-  cdktf get
-  export GITHUB_TOKEN=ghp_...
-  export TF_STATE_BUCKET=your-bucket-name
-  cdktf deploy --auto-approve   # deploys dev environment by default
+  - pip install -r requirements.txt
+  - cdktf get
+  - export GITHUB_TOKEN=ghp_...
+  - export TF_STATE_BUCKET=your-bucket-name
+  - cdktf deploy --auto-approve   # deploys dev environment by default
 
 ### Adding a user
 
